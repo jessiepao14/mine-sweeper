@@ -87,6 +87,20 @@ mcw_game* initialize_file_game(char* filename) {
     return game;
 }
 
+int get_adjacent_weeper_count(mcw_game* game, int x, int y) {
+    int count = 0;
+    if(game->field[y][x] != weeper || is_in_game_bounds(game, x, y)) {
+        for(int i = y - 1; i <= y + 1; i++) {
+            for (int w = x - 1; w <= x + 1; w++) {
+                if (is_in_game_bounds(game, w, i) && game->field[i][w] == weeper) {
+                    count++;
+                }
+            }
+        }
+    }
+    return count;
+}
+
 void display_game_field(mcw_game* game) {
     std::cout << ("  ");
     for (int i = 0; i < game->width; i ++) {
@@ -99,12 +113,17 @@ void display_game_field(mcw_game* game) {
             if(game->field[y][x] == weeper) {
                 emit_utf_8(WEEPER);
             } else {
-                printf("  ");
-                // int adj = get_adjacent_weeper_count(game, x, y);
-                // adj == 0 ? printf("  "):printf(" %d", adj);
+                int adj = get_adjacent_weeper_count(game, x, y);
+                adj == 0 ? printf("  "):printf(" %d", adj);
             }
         }
         std::cout << std::endl;
     }
 }
 
+bool is_in_game_bounds(mcw_game* game, int x, int y) {
+    if (x >= 0 && x < game->width && y >= 0 && y < game->height) {
+        return true;
+    }
+    return false;
+}
