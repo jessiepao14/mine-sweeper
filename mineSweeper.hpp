@@ -27,6 +27,12 @@ typedef struct {
 
 void free_game(mcw_game* game);
 
+void hide_all(mcw_game *game);
+
+void show_all(mcw_game *game);
+
+void show_or_hide(mcw_game *game, int shown);
+
 mcw_game* initialize_random_game(int width, int height, int probability);
 
 mcw_game* initialize_file_game(char* filename);

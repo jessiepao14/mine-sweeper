@@ -38,6 +38,20 @@ void free_game(mcw_game* game) {
     free(game);
 }
 
+void show_or_hide(mcw_game* game, int shown) {
+    for (int i = 0; i < game->height; i++) {
+        for (int x = 0; x < game->width; x++) {
+            game->status[i][x] = (mcw_status) shown;
+        }
+    }
+}
+void show_all(mcw_game* game) {
+    show_or_hide(game, revealed);
+}
+
+void hide_all(mcw_game* game) {
+    show_or_hide(game, hidden);
+}
 
 mcw_game* initialize_file_game(char* filename) {
     FILE* game_file = fopen(filename, "r");
@@ -119,6 +133,25 @@ void display_game_field(mcw_game* game) {
         }
         std::cout << std::endl;
     }
+}
+
+mcw_game* initialize_random_game(int width, int height, int probability) {
+    mcw_game* game = alloc_game(width, height);
+    if (game == NULL) {
+        return NULL;
+    }
+
+    int threshold = probability > MAX_PROBABILITY ? MAX_PROBABILITY : probability;
+
+    int x, y;
+    for (y = 0; y < game->height; y++) {
+        for (x = 0; x < game->width; x++) {
+            int mine_roll = random() % MAX_PROBABILITY;
+            game->field[y][x] = mine_roll < threshold ? weeper : open;
+        }
+    }
+    hide_all(game);
+    return game;
 }
 
 bool is_in_game_bounds(mcw_game* game, int x, int y) {
