@@ -27,20 +27,30 @@ typedef struct {
 
 void free_game(mcw_game* game);
 
-void hide_all(mcw_game *game);
-
-void show_all(mcw_game *game);
-
-void show_or_hide(mcw_game *game, int shown);
-
 mcw_game* initialize_random_game(int width, int height, int probability);
 
 mcw_game* initialize_file_game(char* filename);
 
 void display_game_field(mcw_game* game);
 
+void show_all(mcw_game* game);
+
+int get_weeper_count(mcw_game* game);
+
+int get_flag_count(mcw_game* game);
+
 int get_adjacent_weeper_count(mcw_game* game, int x, int y);
 
-bool is_in_game_bounds(mcw_game *game, int x, int y);
+void display_game_state(mcw_game* game);
+
+bool is_in_game_bounds(mcw_game* game, int x, int y);
+
+void mark_game_square(mcw_game* game, int x, int y);
+
+void reveal_game_square(mcw_game* game, int x, int y);
+
+bool is_game_over_loss(mcw_game* game);
+
+bool is_game_over_win(mcw_game* game);
 
 #endif

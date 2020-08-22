@@ -160,3 +160,50 @@ bool is_in_game_bounds(mcw_game* game, int x, int y) {
     }
     return false;
 }
+
+void mark_game_square(mcw_game* game, int x, int y) {
+    if (is_in_game_bounds(game, x, y)) {
+        if (game->status[y][x] == hidden) {
+            game->status[y][x] = flagged;
+        } else if (game->status[y][x] == flagged) {
+            game->status[y][x] = hidden;
+        }
+    }
+}
+
+void reveal_game_square(mcw_game* game, int x, int y) {
+    if (is_in_game_bounds(game, x, y)) {
+        if (game->status[y][x] == hidden) {
+            game->status[y][x] = revealed;
+            if (game->field[y][x] != weeper && get_adjacent_weeper_count(game, x, y) == 0) {
+                for(int i = y - 1; i <= y + 1; i++) {
+                    for (int w = x - 1; w <= x + 1; w++) {
+                        reveal_game_square(game, w, i);
+                    }
+                }
+            }
+        }
+    }
+}
+
+bool is_game_over_loss(mcw_game* game) {
+    for (int y = 0; y < game->height; y++) {
+        for (int x = 0; x < game->width; x++) {
+            if (game->field[y][x] == weeper && game->status[y][x] == revealed) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+bool is_game_over_win(mcw_game* game) {
+    for (int y = 0; y < game->height; y++) {
+        for (int x = 0; x < game->width; x++) {
+            if ((game->field[y][x] == open && game->status[y][x] != revealed) || (game->field[y][x] == weeper && game->status[y][x] != flagged)) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
