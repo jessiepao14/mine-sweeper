@@ -38,6 +38,14 @@ void free_game(mcw_game* game) {
     free(game);
 }
 
+void display_not_hidden(mcw_game* game, int i, int x) {
+    if (game->field[i][x] == weeper) {
+        emit_utf_8(WEEPER);
+    } else {
+        printf(" %d", get_adjacent_weeper_count(game, x, i));
+    }
+}
+
 void show_or_hide(mcw_game* game, int shown) {
     for (int i = 0; i < game->height; i++) {
         for (int x = 0; x < game->width; x++) {
@@ -51,6 +59,26 @@ void show_all(mcw_game* game) {
 
 void hide_all(mcw_game* game) {
     show_or_hide(game, hidden);
+}
+
+mcw_game* initialize_random_game(int width, int height, int probability) {
+    mcw_game* game = alloc_game(width, height);
+    if (game == NULL) {
+        return NULL;
+    }
+
+    int threshold = probability > MAX_PROBABILITY ? MAX_PROBABILITY : probability;
+
+    int x, y;
+    for (y = 0; y < game->height; y++) {
+        for (x = 0; x < game->width; x++) {
+            int mine_roll = random() % MAX_PROBABILITY;
+            game->field[y][x] = mine_roll < threshold ? weeper : open;
+        }
+    }
+
+    hide_all(game);
+    return game;
 }
 
 mcw_game* initialize_file_game(char* filename) {
@@ -92,27 +120,12 @@ mcw_game* initialize_file_game(char* filename) {
                     return NULL;
                 }
             }
-
             y++;
         }
     }
 
     fclose(game_file);
     return game;
-}
-
-int get_adjacent_weeper_count(mcw_game* game, int x, int y) {
-    int count = 0;
-    if(game->field[y][x] != weeper || is_in_game_bounds(game, x, y)) {
-        for(int i = y - 1; i <= y + 1; i++) {
-            for (int w = x - 1; w <= x + 1; w++) {
-                if (is_in_game_bounds(game, w, i) && game->field[i][w] == weeper) {
-                    count++;
-                }
-            }
-        }
-    }
-    return count;
 }
 
 void display_game_field(mcw_game* game) {
@@ -135,23 +148,68 @@ void display_game_field(mcw_game* game) {
     }
 }
 
-mcw_game* initialize_random_game(int width, int height, int probability) {
-    mcw_game* game = alloc_game(width, height);
-    if (game == NULL) {
-        return NULL;
-    }
-
-    int threshold = probability > MAX_PROBABILITY ? MAX_PROBABILITY : probability;
-
-    int x, y;
-    for (y = 0; y < game->height; y++) {
-        for (x = 0; x < game->width; x++) {
-            int mine_roll = random() % MAX_PROBABILITY;
-            game->field[y][x] = mine_roll < threshold ? weeper : open;
+int get_weeper_count(mcw_game* game) {
+    int count = 0;
+    for (int i = 0; i < game->height; i++) {
+        for(int x = 0; x < game->width; x++) {
+            if (game->field[i][x] == weeper) {
+                count++;
+            }
         }
     }
-    hide_all(game);
-    return game;
+    return count;
+}
+
+int get_flag_count(mcw_game* game) {
+    int count = 0;
+    for (int y = 0; y < game->height; y++) {
+        for(int x = 0; x < game->width; x++) {
+            if (game->status[y][x] == flagged) {
+                count++;
+            }
+        }
+    }
+    return count;
+}
+
+int get_adjacent_weeper_count(mcw_game* game, int x, int y) {
+    int count = 0;
+    if(game->field[y][x] != weeper || is_in_game_bounds(game, x, y)) {
+        for(int i = y - 1; i <= y + 1; i++) {
+            for (int w = x - 1; w <= x + 1; w++) {
+                if (is_in_game_bounds(game, w, i) && game->field[i][w] == weeper) {
+                    count++;
+                }
+            }
+        }
+    }
+    return count;
+}
+
+void display_game_state(mcw_game* game) {
+    printf("  ");
+    for (int i = 0; i < game->width; i ++) {
+        printf(" %d", i);
+    }
+    std::cout << std::endl;
+    for (int y = 0; y < game->height; y++) {
+        printf(" %d", y);
+        for (int x = 0; x < game->width; x++) {
+            if (game->status[y][x] == hidden) {
+                emit_utf_8(HIDDEN);
+            } else if (game->status[y][x] == revealed){
+                if (game->field[y][x] == weeper) {
+                    emit_utf_8(WEEPER);
+                } else {
+                    int adj = get_adjacent_weeper_count(game, x, y);
+                    adj == 0 ? printf("  "):printf(" %d", adj);
+                }
+            } else if (game->status[y][x] == flagged) {
+                emit_utf_8(MARKER);
+            }
+        }
+        std::cout << std::endl;;
+    }
 }
 
 bool is_in_game_bounds(mcw_game* game, int x, int y) {
