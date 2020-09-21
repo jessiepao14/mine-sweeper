@@ -18,13 +18,18 @@ The System Application, mine-sweeeper was designed mimic the classic game mine-s
 
 These include...
 
-![Screen Shot 2020-07-30 at 5 17 50 PM](https://user-images.githubusercontent.com/54599611/88987147-e73b5800-d289-11ea-80e9-8f64241b2f31.png)
+![Screen Shot 2020-08-24 at 2 59 41 PM](https://user-images.githubusercontent.com/54599611/93818342-18dbfa00-fc0f-11ea-80ef-2e083192ecb3.png)
 
-![Screen Shot 2020-07-30 at 5 18 27 PM](https://user-images.githubusercontent.com/54599611/88987159-f15d5680-d289-11ea-8ece-dcb1d8ba58d5.png)
+![Screen Shot 2020-08-24 at 2 59 23 PM](https://user-images.githubusercontent.com/54599611/93818345-19749080-fc0f-11ea-8343-a364d9cc93bb.png)
 
-![Screen Shot 2020-07-30 at 5 23 26 PM](https://user-images.githubusercontent.com/54599611/88987178-fde1af00-d289-11ea-8534-707f55576900.png)
+![Screen Shot 2020-08-24 at 3 00 53 PM](https://user-images.githubusercontent.com/54599611/93818346-1a0d2700-fc0f-11ea-8bda-890e34b8cca2.png)
 
-![Screen Shot 2020-07-30 at 5 23 35 PM](https://user-images.githubusercontent.com/54599611/88987182-00440900-d28a-11ea-954f-c13089f5a7bc.png)
+![Screen Shot 2020-08-24 at 3 00 46 PM](https://user-images.githubusercontent.com/54599611/93818350-1aa5bd80-fc0f-11ea-9e80-ad2d6ceeb0be.png)
+
+![Screen Shot 2020-08-24 at 3 00 37 PM](https://user-images.githubusercontent.com/54599611/93818351-1aa5bd80-fc0f-11ea-93fe-e8ee1e6bf074.png)
+
+![Screen Shot 2020-08-24 at 3 00 30 PM](https://user-images.githubusercontent.com/54599611/93818353-1b3e5400-fc0f-11ea-9bde-006eb7be6f1d.png)
+
 
 ### Built With
 * C++
